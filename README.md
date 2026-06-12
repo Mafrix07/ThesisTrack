@@ -1,10 +1,10 @@
 # 🎓 ThesisTrack
 
-> Plateforme de gestion des soutenances de fin d'études — Symfony 6/7
+> Plateforme de gestion des soutenances de fin d'études — Symfony 8.1
 
-![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat&logo=php)
-![Symfony](https://img.shields.io/badge/Symfony-6%2F7-000000?style=flat&logo=symfony)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)
+![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=flat&logo=php)
+![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?style=flat&logo=symfony)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
@@ -38,9 +38,9 @@ Elle permet de :
 
 | Composant | Technologie |
 |-----------|-------------|
-| Backend | PHP 8.x / Symfony 6 ou 7 |
+| Backend | PHP 8.4 / Symfony 8.1 |
 | ORM | Doctrine |
-| Base de données | MySQL 8.0 |
+| Base de données | PostgreSQL 16 |
 | Frontend | Twig + Bootstrap 5 |
 | Sécurité | Symfony Security Bundle |
 | Versioning | Git / GitHub |
@@ -61,7 +61,7 @@ Elle permet de :
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/TON_USERNAME/ThesisTrack.git
+git clone https://github.com/Mafrix07/ThesisTrack.git
 cd ThesisTrack
 
 # 2. Installer les dépendances PHP
@@ -70,7 +70,7 @@ composer install
 # 3. Configurer l'environnement
 cp .env .env.local
 # Éditer .env.local et renseigner DATABASE_URL :
-# DATABASE_URL="mysql://user:password@127.0.0.1:3306/thesistrack"
+# DATABASE_URL="postgresql://app:password@127.0.0.1:5432/thesistrack?serverVersion=16&charset=utf8"
 
 # 4. Créer la base de données
 php bin/console doctrine:database:create
@@ -187,7 +187,7 @@ ThesisTrack/
 
 ## 👨‍💻 Auteur
 
-**[TON NOM COMPLET]**
+**Mario D'ALMEIDA**
 Filière : GL / WIM — Licence 2
 Année universitaire : 2025–2026
 Examen Final — IT232
