@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord - SoutenancePro{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_dashboard') }}">SoutenancePro</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-item nav-link active" href="{{ path('app_dashboard') }}">Dashboard</a>
+                </li>
+            </ul>
+            <div class="navbar-nav">
+                <span class="navbar-text me-3">
+                    Connecté : {{ app.user.prenom }} {{ app.user.nom }} ({{ app.user.roles|join(', ') }})
+                </span>
+                <a class="btn btn-outline-light btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Bienvenue sur SoutenancePro</h1>
+    <p class="lead">Votre plateforme de gestion des soutenances.</p>
+    
+    <div class="alert alert-info">
+        Ceci est le tableau de bord temporaire. La Partie 1 est opérationnelle !
+    </div>
+</div>
+{% endblock %}
