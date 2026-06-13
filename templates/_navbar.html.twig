@@ -19,6 +19,9 @@
                 <li class="nav-item">
                     <a class="nav-link {% if 'app_salle' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_salle_index') }}">Salles</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'app_soutenance' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_soutenance_index') }}">Soutenances</a>
+                </li>
                 {% endif %}
             </ul>
             <div class="navbar-nav">

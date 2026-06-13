@@ -1,0 +1,34 @@
+{{ form_start(form) }}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            {{ form_row(form.etudiant) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            {{ form_row(form.date) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.heure) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.salle) }}
+        </div>
+    </div>
+    <hr>
+    <h5>Membres du Jury</h5>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            {{ form_row(form.president) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.rapporteur) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.examinateur) }}
+        </div>
+    </div>
+    <div class="d-grid mt-4">
+        <button class="btn btn-success btn-lg">{{ button_label|default('Confirmer la programmation') }}</button>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_soutenance_delete', {'id': soutenance.id}) }}" onsubmit="return confirm('Voulez-vous vraiment annuler cette soutenance ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ soutenance.id) }}">
+    <button class="btn btn-danger">Annuler la soutenance</button>
+</form>
