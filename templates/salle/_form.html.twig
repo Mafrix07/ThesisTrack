@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_row(form.code) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.capacite) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.localisation) }}
+    </div>
+    <div class="d-grid">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+{{ form_end(form) }}

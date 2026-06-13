@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link {% if 'app_enseignant' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_enseignant_index') }}">Enseignants</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'app_salle' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_salle_index') }}">Salles</a>
+                </li>
                 {% endif %}
             </ul>
             <div class="navbar-nav">

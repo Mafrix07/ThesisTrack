@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Salle{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h2 class="h4 mb-0">Détails Salle : {{ salle.code }}</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 40%">Code</th>
+                                <td>{{ salle.code }}</td>
+                            </tr>
+                            <tr>
+                                <th>Capacité</th>
+                                <td>{{ salle.capacite }} places</td>
+                            </tr>
+                            <tr>
+                                <th>Localisation</th>
+                                <td>{{ salle.localisation }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('app_salle_index') }}" class="btn btn-secondary">Retour</a>
+                    <a href="{{ path('app_salle_edit', {'id': salle.id}) }}" class="btn btn-warning">Modifier</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

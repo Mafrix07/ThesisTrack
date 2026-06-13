@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\AppUser;
 use App\Entity\Enseignant;
 use App\Entity\Etudiant;
+use App\Entity\Salle;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -58,6 +59,21 @@ class AppFixtures extends Fixture
             $etudiant->setFiliere($filiere);
             $etudiant->setThemeMemoire('Thème de recherche n°' . $i);
             $manager->persist($etudiant);
+        }
+
+        // Création de salles
+        $salles = [
+            ['A101', 30, 'Bâtiment A, 1er étage'],
+            ['A102', 20, 'Bâtiment A, 1er étage'],
+            ['B201', 50, 'Bâtiment B, 2ème étage'],
+        ];
+
+        foreach ($salles as $data) {
+            $salle = new Salle();
+            $salle->setCode($data[0]);
+            $salle->setCapacite($data[1]);
+            $salle->setLocalisation($data[2]);
+            $manager->persist($salle);
         }
 
         $manager->flush();

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Salle{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-warning">
+                    <h2 class="h4 mb-0">Modifier Salle : {{ salle.code }}</h2>
+                </div>
+                <div class="card-body">
+                    {{ include('salle/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('app_salle_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                    {{ include('salle/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
