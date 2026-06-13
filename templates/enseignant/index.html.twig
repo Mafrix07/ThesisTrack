@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Enseignants{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des Enseignants</h1>
+        <a href="{{ path('app_enseignant_new') }}" class="btn btn-primary">Ajouter un enseignant</a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Spécialité</th>
+                    <th>Compte lié</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for enseignant in enseignants %}
+                <tr>
+                    <td>{{ enseignant.nom }}</td>
+                    <td>{{ enseignant.prenom }}</td>
+                    <td>{{ enseignant.email }}</td>
+                    <td>{{ enseignant.specialite }}</td>
+                    <td>
+                        {% if enseignant.user %}
+                            <span class="badge bg-success">{{ enseignant.user.email }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Aucun</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                        <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucun enseignant trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

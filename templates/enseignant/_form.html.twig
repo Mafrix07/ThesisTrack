@@ -1,0 +1,23 @@
+{{ form_start(form) }}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            {{ form_row(form.nom) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.prenom) }}
+        </div>
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.email) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.specialite) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.user) }}
+        <div class="form-text">Liez cet enseignant à un compte utilisateur pour lui permettre de se connecter.</div>
+    </div>
+    <div class="d-grid">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+{{ form_end(form) }}

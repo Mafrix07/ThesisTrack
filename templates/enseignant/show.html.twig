@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Enseignant{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h2 class="h4 mb-0">Détails de {{ enseignant.prenom }} {{ enseignant.nom }}</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 30%">Nom</th>
+                                <td>{{ enseignant.nom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Prénom</th>
+                                <td>{{ enseignant.prenom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ enseignant.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Spécialité</th>
+                                <td><span class="badge bg-secondary">{{ enseignant.specialite }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Compte Utilisateur</th>
+                                <td>
+                                    {% if enseignant.user %}
+                                        {{ enseignant.user.email }} (Rôles: {{ enseignant.user.roles|join(', ') }})
+                                    {% else %}
+                                        <span class="text-muted">Aucun compte lié</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('app_enseignant_index') }}" class="btn btn-secondary">Retour</a>
+                    <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-warning">Modifier</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

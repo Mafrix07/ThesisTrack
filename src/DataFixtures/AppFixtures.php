@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\AppUser;
+use App\Entity\Enseignant;
+use App\Entity\Etudiant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -29,14 +31,34 @@ class AppFixtures extends Fixture
         $manager->persist($admin);
 
         // Création d'un Enseignant
-        $teacher = new AppUser();
-        $teacher->setEmail('prof@soutenance.pro');
-        $teacher->setNom('DOE');
-        $teacher->setPrenom('John');
-        $teacher->setRoles(['ROLE_ENSEIGNANT']);
-        $password = $this->hasher->hashPassword($teacher, 'prof123');
-        $teacher->setPassword($password);
-        $manager->persist($teacher);
+        $teacherUser = new AppUser();
+        $teacherUser->setEmail('prof@soutenance.pro');
+        $teacherUser->setNom('DOE');
+        $teacherUser->setPrenom('John');
+        $teacherUser->setRoles(['ROLE_ENSEIGNANT']);
+        $password = $this->hasher->hashPassword($teacherUser, 'prof123');
+        $teacherUser->setPassword($password);
+        $manager->persist($teacherUser);
+
+        $enseignant = new Enseignant();
+        $enseignant->setNom('DOE');
+        $enseignant->setPrenom('John');
+        $enseignant->setEmail('prof@soutenance.pro');
+        $enseignant->setSpecialite('Génie Logiciel');
+        $enseignant->setUser($teacherUser);
+        $manager->persist($enseignant);
+
+        // Création d'étudiants
+        $filiere = 'Informatique';
+        for ($i = 1; $i <= 5; $i++) {
+            $etudiant = new Etudiant();
+            $etudiant->setNom('Etudiant' . $i);
+            $etudiant->setPrenom('Prenom' . $i);
+            $etudiant->setEmail('etudiant' . $i . '@univ.test');
+            $etudiant->setFiliere($filiere);
+            $etudiant->setThemeMemoire('Thème de recherche n°' . $i);
+            $manager->persist($etudiant);
+        }
 
         $manager->flush();
     }

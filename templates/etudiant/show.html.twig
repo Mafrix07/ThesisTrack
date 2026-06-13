@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Étudiant{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h2 class="h4 mb-0">Détails de {{ etudiant.prenom }} {{ etudiant.nom }}</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 30%">Nom</th>
+                                <td>{{ etudiant.nom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Prénom</th>
+                                <td>{{ etudiant.prenom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ etudiant.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Filière</th>
+                                <td><span class="badge bg-secondary">{{ etudiant.filiere }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Thème du mémoire</th>
+                                <td>{{ etudiant.themeMemoire }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('app_etudiant_index') }}" class="btn btn-secondary">Retour</a>
+                    <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-warning">Modifier</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
