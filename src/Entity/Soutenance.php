@@ -45,7 +45,7 @@ class Soutenance
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message: 'La date est obligatoire.')]
-    #[Assert\GreaterThanOrEqual('today', message: 'La date ne peut pas être dans le passé.')]
+    #[Assert\GreaterThanOrEqual('today', message: 'La date ne peut pas être dans le passé.', groups: ['creation'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]

@@ -37,7 +37,7 @@ class SoutenanceController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, SoutenanceRepository $soutenanceRepository): Response
     {
         $soutenance = new Soutenance();
-        $form = $this->createForm(SoutenanceType::class, $soutenance);
+        $form = $this->createForm(SoutenanceType::class, $soutenance, ['validation_groups' => ['Default', 'creation']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,7 +72,7 @@ class SoutenanceController extends AbstractController
     #[Route('/{id}/edit', name: 'app_soutenance_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Soutenance $soutenance, EntityManagerInterface $entityManager, SoutenanceRepository $soutenanceRepository): Response
     {
-        $form = $this->createForm(SoutenanceType::class, $soutenance);
+        $form = $this->createForm(SoutenanceType::class, $soutenance, ['validation_groups' => ['Default']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

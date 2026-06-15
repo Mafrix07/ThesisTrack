@@ -3,51 +3,71 @@
 {% block title %}Connexion - SoutenancePro{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3 class="mb-0">SoutenancePro</h3>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post">
-                        {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                        {% endif %}
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8f3fc 0%,#dbeafe 50%,#ede9fe 100%);padding:24px;position:relative;overflow:hidden">
 
-                        {% if app.user %}
-                            <div class="mb-3">
-                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
-                            </div>
-                        {% endif %}
+  <div style="position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 18px,rgba(74,144,217,.055) 18px,rgba(74,144,217,.055) 19px);pointer-events:none"></div>
 
-                        <h1 class="h4 mb-3 font-weight-normal text-center">Veuillez vous connecter</h1>
-                        
-                        <div class="mb-3">
-                            <label for="inputEmail" class="form-label">Email</label>
-                            <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="inputPassword" class="form-label">Mot de passe</label>
-                            <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-                        </div>
+  <div style="position:relative;z-index:1;width:100%;max-width:420px">
 
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button class="btn btn-primary" type="submit">
-                                Se connecter
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center text-muted">
-                    Gestion des soutenances de fin d'études
-                </div>
-            </div>
-        </div>
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#4a90d9,#1a56db);display:grid;place-items:center;margin:0 auto 16px;box-shadow:0 8px 20px rgba(74,144,217,.4)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </svg>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;color:#0f172a;line-height:1">Thesis<span style="color:#4a90d9">Track</span></div>
+      <div style="font-size:13px;color:#64748b;font-weight:500;margin-top:4px">Gestion des soutenances de fin d'études</div>
     </div>
+
+    <div style="background:#fff;border-radius:20px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,.08);border:1px solid #e2e8f0">
+
+      {% if error %}
+        <div class="tt-flash danger" style="margin-bottom:20px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+      {% endif %}
+
+      {% if app.user %}
+        <div style="margin-bottom:16px;font-size:14px;color:#334155">
+          Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
+          <a href="{{ path('app_logout') }}" style="color:#1a56db">Déconnexion</a>
+        </div>
+      {% endif %}
+
+      <p style="font-size:14px;font-weight:600;color:#334155;margin-bottom:24px;text-align:center">Connectez-vous à votre espace</p>
+
+      <form method="post">
+        <div style="margin-bottom:18px">
+          <label for="inputEmail" style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:6px">Adresse e-mail</label>
+          <input type="email" value="{{ last_username }}" name="_username" id="inputEmail"
+            style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:9px;padding:10px 14px;font-size:14px;outline:none;color:#0f172a;font-family:'Outfit',system-ui,sans-serif;transition:.15s"
+            onfocus="this.style.borderColor='#1a56db';this.style.boxShadow='0 0 0 3px rgba(26,86,219,.1)'"
+            onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"
+            autocomplete="email" required autofocus placeholder="votre@email.com">
+        </div>
+
+        <div style="margin-bottom:28px">
+          <label for="inputPassword" style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:6px">Mot de passe</label>
+          <input type="password" name="_password" id="inputPassword"
+            style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:9px;padding:10px 14px;font-size:14px;outline:none;color:#0f172a;font-family:'Outfit',system-ui,sans-serif;transition:.15s"
+            onfocus="this.style.borderColor='#1a56db';this.style.boxShadow='0 0 0 3px rgba(26,86,219,.1)'"
+            onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"
+            autocomplete="current-password" required placeholder="••••••••">
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <button type="submit"
+          style="width:100%;background:#1a56db;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:'Outfit',system-ui,sans-serif;box-shadow:0 4px 14px rgba(26,86,219,.35);transition:.15s"
+          onmouseover="this.style.background='#1648c5';this.style.transform='translateY(-1px)'"
+          onmouseout="this.style.background='#1a56db';this.style.transform='translateY(0)'">
+          Se connecter
+        </button>
+      </form>
+    </div>
+
+  </div>
 </div>
 {% endblock %}

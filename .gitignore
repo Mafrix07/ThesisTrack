@@ -18,3 +18,9 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Projet externe — dépôt Git indépendant
+/logs_tests/
+
+# IDE
+/.idea/

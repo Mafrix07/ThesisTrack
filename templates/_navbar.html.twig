@@ -1,47 +1,64 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ path('app_dashboard') }}">SoutenancePro</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}" href="{{ path('app_dashboard') }}">Tableau de bord</a>
-                </li>
-                
-                {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
-                    <a class="nav-link {% if 'app_etudiant' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_etudiant_index') }}">Étudiants</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'app_enseignant' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_enseignant_index') }}">Enseignants</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'app_salle' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_salle_index') }}">Salles</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'app_soutenance' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_soutenance_index') }}">Soutenances</a>
-                </li>
-                {% endif %}
+<header class="site-header">
+  <div class="header-inner">
 
-                {% if is_granted('ROLE_ENSEIGNANT') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_dashboard') }}#mes-soutenances">Mes soutenances</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_dashboard') }}#mes-jurys">Mes jurys</a>
-                </li>
-                {% endif %}
-            </ul>
-            <div class="navbar-nav">
-                {% if app.user %}
-                <span class="navbar-text me-3">
-                    {{ app.user.prenom }} {{ app.user.nom }} ({{ is_granted('ROLE_ADMIN') ? 'Admin' : 'Enseignant' }})
-                </span>
-                <a class="btn btn-outline-light btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
-                {% endif %}
-            </div>
-        </div>
+    <a class="brand" href="{{ path('app_dashboard') }}">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Thesis<em>Track</em></div>
+        <div class="brand-sub">Gestion des soutenances</div>
+      </div>
+    </a>
+
+    <nav class="main-nav">
+      <a class="nav-lnk {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}"
+         href="{{ path('app_dashboard') }}">Tableau de bord</a>
+
+      {% if is_granted('ROLE_ADMIN') %}
+      <a class="nav-lnk {% if 'app_etudiant' in app.request.attributes.get('_route') %}active{% endif %}"
+         href="{{ path('app_etudiant_index') }}">
+        <span class="nav-dot d-etudiant"></span>Étudiants
+      </a>
+      <a class="nav-lnk {% if 'app_enseignant' in app.request.attributes.get('_route') %}active{% endif %}"
+         href="{{ path('app_enseignant_index') }}">
+        <span class="nav-dot d-enseignant"></span>Enseignants
+      </a>
+      <a class="nav-lnk {% if 'app_salle' in app.request.attributes.get('_route') %}active{% endif %}"
+         href="{{ path('app_salle_index') }}">
+        <span class="nav-dot d-salle"></span>Salles
+      </a>
+      <a class="nav-lnk {% if 'app_soutenance' in app.request.attributes.get('_route') %}active{% endif %}"
+         href="{{ path('app_soutenance_index') }}">
+        <span class="nav-dot d-soutenance"></span>Soutenances
+      </a>
+      {% endif %}
+
+      {% if is_granted('ROLE_ENSEIGNANT') %}
+      <a class="nav-lnk" href="{{ path('app_dashboard') }}#mes-soutenances">Mes soutenances</a>
+      <a class="nav-lnk" href="{{ path('app_dashboard') }}#mes-jurys">Mes jurys</a>
+      {% endif %}
+    </nav>
+
+    <div class="header-user">
+      {% if app.user %}
+      <div>
+        <div class="user-info">{{ app.user.prenom }} {{ app.user.nom }}</div>
+        <div class="user-role">{{ is_granted('ROLE_ADMIN') ? 'Administrateur' : 'Enseignant' }}</div>
+      </div>
+      <a class="btn-logout" href="{{ path('app_logout') }}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Déconnexion
+      </a>
+      {% endif %}
     </div>
-</nav>
+
+  </div>
+</header>

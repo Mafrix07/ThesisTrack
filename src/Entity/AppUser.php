@@ -125,14 +125,25 @@ class AppUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
     public function __serialize(): array
     {
-        $data = (array) $this;
-        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
-        
-        return $data;
+        return [
+            'id'       => $this->id,
+            'email'    => $this->email,
+            'nom'      => $this->nom,
+            'prenom'   => $this->prenom,
+            'roles'    => $this->roles,
+            'password' => hash('crc32c', $this->password),
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id       = $data['id'];
+        $this->email    = $data['email'];
+        $this->nom      = $data['nom'];
+        $this->prenom   = $data['prenom'];
+        $this->roles    = $data['roles'];
+        $this->password = $data['password'];
     }
 }

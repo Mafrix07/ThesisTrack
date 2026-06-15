@@ -5,44 +5,65 @@
 {% block body %}
 {% include '_navbar.html.twig' %}
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Liste des Salles</h1>
-        <a href="{{ path('app_salle_new') }}" class="btn btn-primary">Ajouter une salle</a>
-    </div>
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title">Liste des <em>Salles</em></h1>
+    <a href="{{ path('app_salle_new') }}" class="btn-add">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter une salle
+    </a>
+  </div>
+</section>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+<main class="page-body">
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Code</th>
-                    <th>Capacité</th>
-                    <th>Localisation</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for salle in salles %}
-                <tr>
-                    <td>{{ salle.code }}</td>
-                    <td>{{ salle.capacite }} places</td>
-                    <td>{{ salle.localisation }}</td>
-                    <td>
-                        <a href="{{ path('app_salle_show', {'id': salle.id}) }}" class="btn btn-sm btn-info">Voir</a>
-                        <a href="{{ path('app_salle_edit', {'id': salle.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center">Aucune salle enregistrée.</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+  {% for message in app.flashes('success') %}
+    <div class="tt-flash success">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ message }}
     </div>
-</div>
+  {% endfor %}
+
+  <div class="table-panel">
+    <div class="table-toolbar">
+      <div class="ttbar-left">
+        <span class="ttbar-accent"></span>
+        <h2 class="table-title">Salles disponibles</h2>
+      </div>
+      <span class="result-count">{{ salles|length }} salle(s)</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Capacité</th>
+            <th>Localisation</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for salle in salles %}
+          <tr>
+            <td><strong>{{ salle.code }}</strong></td>
+            <td>{{ salle.capacite }} places</td>
+            <td>{{ salle.localisation }}</td>
+            <td style="white-space:nowrap">
+              <a href="{{ path('app_salle_show', {'id': salle.id}) }}" class="btn-view">Voir</a>
+              <a href="{{ path('app_salle_edit', {'id': salle.id}) }}" class="btn-edit">Modifier</a>
+              <form method="post" action="{{ path('app_salle_delete', {'id': salle.id}) }}" class="d-inline" onsubmit="return confirm('Supprimer cette salle ?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
+                <button class="btn-del">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr class="td-empty"><td colspan="4">Aucune salle enregistrée</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
 {% endblock %}

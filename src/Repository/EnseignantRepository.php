@@ -15,4 +15,17 @@ class EnseignantRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Enseignant::class);
     }
+
+    /**
+     * @return Enseignant[]
+     */
+    public function findAllWithUser(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.user', 'u')
+            ->addSelect('u')
+            ->orderBy('e.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
