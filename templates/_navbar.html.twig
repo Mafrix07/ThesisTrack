@@ -7,8 +7,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}" href="{{ path('app_dashboard') }}">Dashboard</a>
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}" href="{{ path('app_dashboard') }}">Tableau de bord</a>
                 </li>
+                
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                     <a class="nav-link {% if 'app_etudiant' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_etudiant_index') }}">Étudiants</a>
@@ -23,12 +24,23 @@
                     <a class="nav-link {% if 'app_soutenance' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_soutenance_index') }}">Soutenances</a>
                 </li>
                 {% endif %}
+
+                {% if is_granted('ROLE_ENSEIGNANT') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_dashboard') }}#mes-soutenances">Mes soutenances</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_dashboard') }}#mes-jurys">Mes jurys</a>
+                </li>
+                {% endif %}
             </ul>
             <div class="navbar-nav">
+                {% if app.user %}
                 <span class="navbar-text me-3">
-                    {{ app.user.prenom }} {{ app.user.nom }}
+                    {{ app.user.prenom }} {{ app.user.nom }} ({{ is_granted('ROLE_ADMIN') ? 'Admin' : 'Enseignant' }})
                 </span>
                 <a class="btn btn-outline-light btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
+                {% endif %}
             </div>
         </div>
     </div>

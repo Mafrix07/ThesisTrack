@@ -28,6 +28,6 @@ class SecurityTest extends WebTestCase
         $this->assertResponseRedirects('/');
         
         $client->followRedirect();
-        $this->assertSelectorTextContains('h1', 'Bienvenue sur SoutenancePro');
+        $this->assertSelectorTextContains('h1', 'Bienvenue');
     }
 }

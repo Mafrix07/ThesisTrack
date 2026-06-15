@@ -25,4 +25,18 @@ class SoutenanceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Soutenance[]
+     */
+    public function findByEnseignant($enseignant): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.president = :ens OR s.rapporteur = :ens OR s.examinateur = :ens')
+            ->setParameter('ens', $enseignant)
+            ->orderBy('s.date', 'ASC')
+            ->addOrderBy('s.heure', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

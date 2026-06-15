@@ -31,23 +31,27 @@ class AppFixtures extends Fixture
         $admin->setPassword($password);
         $manager->persist($admin);
 
-        // Création d'un Enseignant
-        $teacherUser = new AppUser();
-        $teacherUser->setEmail('prof@soutenance.pro');
-        $teacherUser->setNom('DOE');
-        $teacherUser->setPrenom('John');
-        $teacherUser->setRoles(['ROLE_ENSEIGNANT']);
-        $password = $this->hasher->hashPassword($teacherUser, 'prof123');
-        $teacherUser->setPassword($password);
-        $manager->persist($teacherUser);
+        // Création de 3 Enseignants pour les jurys
+        $specialites = ['Génie Logiciel', 'Réseaux', 'Sécurité'];
+        for ($i = 1; $i <= 3; $i++) {
+            $teacherUser = new AppUser();
+            $email = "prof{$i}@soutenance.pro";
+            $teacherUser->setEmail($email);
+            $teacherUser->setNom('NOM_PROF' . $i);
+            $teacherUser->setPrenom('PRENOM_PROF' . $i);
+            $teacherUser->setRoles(['ROLE_ENSEIGNANT']);
+            $password = $this->hasher->hashPassword($teacherUser, 'prof123');
+            $teacherUser->setPassword($password);
+            $manager->persist($teacherUser);
 
-        $enseignant = new Enseignant();
-        $enseignant->setNom('DOE');
-        $enseignant->setPrenom('John');
-        $enseignant->setEmail('prof@soutenance.pro');
-        $enseignant->setSpecialite('Génie Logiciel');
-        $enseignant->setUser($teacherUser);
-        $manager->persist($enseignant);
+            $enseignant = new Enseignant();
+            $enseignant->setNom('NOM_PROF' . $i);
+            $enseignant->setPrenom('PRENOM_PROF' . $i);
+            $enseignant->setEmail($email);
+            $enseignant->setSpecialite($specialites[$i-1]);
+            $enseignant->setUser($teacherUser);
+            $manager->persist($enseignant);
+        }
 
         // Création d'étudiants
         $filiere = 'Informatique';

@@ -8,19 +8,20 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1>Bienvenue sur SoutenancePro</h1>
+            <h1>Bienvenue, {{ app.user.prenom }} !</h1>
             <p class="lead">Votre plateforme de gestion des soutenances.</p>
         </div>
     </div>
     
-    <div class="row mt-4">
-        {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') %}
+    <h3 class="mt-4">Statistiques Globales</h3>
+    <div class="row">
         <div class="col-md-3">
             <div class="card text-white bg-primary mb-3">
                 <div class="card-body text-center">
                     <h5 class="card-title">Étudiants</h5>
-                    <p class="card-text">Gérez les dossiers étudiants.</p>
-                    <a href="{{ path('app_etudiant_index') }}" class="btn btn-light">Voir</a>
+                    <h2 class="display-4">{{ stats.etudiants }}</h2>
+                    <a href="{{ path('app_etudiant_index') }}" class="btn btn-light btn-sm">Gérer</a>
                 </div>
             </div>
         </div>
@@ -28,8 +29,8 @@
             <div class="card text-white bg-success mb-3">
                 <div class="card-body text-center">
                     <h5 class="card-title">Enseignants</h5>
-                    <p class="card-text">Gérez le corps professoral.</p>
-                    <a href="{{ path('app_enseignant_index') }}" class="btn btn-light">Voir</a>
+                    <h2 class="display-4">{{ stats.enseignants }}</h2>
+                    <a href="{{ path('app_enseignant_index') }}" class="btn btn-light btn-sm">Gérer</a>
                 </div>
             </div>
         </div>
@@ -37,8 +38,8 @@
             <div class="card text-white bg-info mb-3">
                 <div class="card-body text-center">
                     <h5 class="card-title">Salles</h5>
-                    <p class="card-text">Gérez les salles de soutenance.</p>
-                    <a href="{{ path('app_salle_index') }}" class="btn btn-light">Voir</a>
+                    <h2 class="display-4">{{ stats.salles }}</h2>
+                    <a href="{{ path('app_salle_index') }}" class="btn btn-light btn-sm">Gérer</a>
                 </div>
             </div>
         </div>
@@ -46,12 +47,67 @@
             <div class="card text-white bg-dark mb-3">
                 <div class="card-body text-center">
                     <h5 class="card-title">Soutenances</h5>
-                    <p class="card-text">Planifiez les examens.</p>
-                    <a href="{{ path('app_soutenance_index') }}" class="btn btn-light">Voir</a>
+                    <h2 class="display-4">{{ stats.soutenances }}</h2>
+                    <a href="{{ path('app_soutenance_index') }}" class="btn btn-light btn-sm">Gérer</a>
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_ENSEIGNANT') %}
+    <div class="row mt-4" id="mes-jurys">
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-dark">Mes Participations (Jurys)</h5>
+                    <h2 class="display-4 text-dark">{{ enseignant_data.count }}</h2>
+                    <p class="text-dark">Nombre de jurys auxquels vous participez.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4" id="mes-soutenances">
+        <div class="col-12">
+            <h3>Mes Soutenances Programmées</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date & Heure</th>
+                            <th>Étudiant</th>
+                            <th>Thème du mémoire</th>
+                            <th>Salle</th>
+                            <th>Mon Rôle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for soutenance in enseignant_data.soutenances %}
+                        <tr>
+                            <td>{{ soutenance.date ? soutenance.date|date('d/m/Y') : '' }} à {{ soutenance.heure ? soutenance.heure|date('H:i') : '' }}</td>
+                            <td>{{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }}</td>
+                            <td>{{ soutenance.etudiant.themeMemoire }}</td>
+                            <td>{{ soutenance.salle.code }} ({{ soutenance.salle.localisation }})</td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                {% set ens_user = app.user %}
+                                {% if soutenance.president.user and soutenance.president.user.id == ens_user.id %}Président{% endif %}
+                                {% if soutenance.rapporteur.user and soutenance.rapporteur.user.id == ens_user.id %}Rapporteur{% endif %}
+                                {% if soutenance.examinateur.user and soutenance.examinateur.user.id == ens_user.id %}Examinateur{% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucune soutenance programmée pour le moment.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -95,8 +95,10 @@ L'application est accessible sur : **http://localhost:8000**
 
 | Rôle | Email | Mot de passe |
 |------|-------|--------------|
-| Administrateur | admin@thesistrack.com | Admin@1234 |
-| Enseignant | enseignant@thesistrack.com | Enseignant@1234 |
+| Administrateur | admin@soutenance.pro | admin123 |
+| Enseignant 1 | prof1@soutenance.pro | prof123 |
+| Enseignant 2 | prof2@soutenance.pro | prof123 |
+| Enseignant 3 | prof3@soutenance.pro | prof123 |
 
 ---
 
