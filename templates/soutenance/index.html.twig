@@ -30,20 +30,24 @@
   <div class="filter-section">
     <div class="filter-head">
       <div class="filter-head-icon">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
       </div>
-      <span class="filter-head-label">Filtrer par date</span>
+      <span class="filter-head-label">Filtres</span>
     </div>
     <form method="get" class="filter-row">
       <div class="f-group">
-        <label class="f-label" for="date">Date de soutenance</label>
+        <label class="f-label" for="search">Étudiant ou enseignant</label>
+        <input id="search" class="f-input" type="text" name="search" placeholder="Rechercher par nom…" value="{{ search }}">
+      </div>
+      <div class="f-group">
+        <label class="f-label" for="date">Date</label>
         <input id="date" class="f-input" type="date" name="date" value="{{ current_date }}">
       </div>
       <button type="submit" class="btn-filter">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
         Filtrer
       </button>
-      {% if current_date %}
+      {% if current_date or search %}
       <a href="{{ path('app_soutenance_index') }}" class="btn-filter" style="background:#64748b">Tout afficher</a>
       {% endif %}
     </form>
@@ -85,7 +89,8 @@
             <td style="white-space:nowrap">
               <a href="{{ path('app_soutenance_show', {'id': soutenance.id}) }}" class="btn-view">Voir</a>
               <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="btn-edit">Modifier</a>
-              <form method="post" action="{{ path('app_soutenance_delete', {'id': soutenance.id}) }}" class="d-inline" onsubmit="return confirm('Annuler cette soutenance ?')">
+              <form method="post" action="{{ path('app_soutenance_delete', {'id': soutenance.id}) }}" class="d-inline"
+                    data-confirm="Annuler la soutenance de {{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }} du {{ soutenance.date|date('d/m/Y') }} ?">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ soutenance.id) }}">
                 <button class="btn-del">Annuler</button>
               </form>

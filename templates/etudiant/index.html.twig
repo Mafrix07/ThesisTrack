@@ -80,7 +80,8 @@
             <td style="white-space:nowrap">
               <a href="{{ path('app_etudiant_show', {'id': etudiant.id}) }}" class="btn-view">Voir</a>
               <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn-edit">Modifier</a>
-              <form method="post" action="{{ path('app_etudiant_delete', {'id': etudiant.id}) }}" class="d-inline" onsubmit="return confirm('Supprimer cet étudiant ?')">
+              <form method="post" action="{{ path('app_etudiant_delete', {'id': etudiant.id}) }}" class="d-inline"
+                    data-confirm="Supprimer l'étudiant {{ etudiant.prenom }} {{ etudiant.nom }} ? Cette action est irréversible.">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ etudiant.id) }}">
                 <button class="btn-del">Supprimer</button>
               </form>

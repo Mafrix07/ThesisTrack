@@ -25,11 +25,15 @@ class DashboardController extends AbstractController
 
         if ($this->isGranted('ROLE_ADMIN')) {
             $data['stats'] = [
-                'etudiants' => $etudiantRepository->count([]),
+                'etudiants'   => $etudiantRepository->count([]),
                 'enseignants' => $enseignantRepository->count([]),
-                'salles' => $salleRepository->count([]),
+                'salles'      => $salleRepository->count([]),
                 'soutenances' => $soutenanceRepository->count([]),
             ];
+            $data['upcoming']   = $soutenanceRepository->findUpcoming(5);
+            $rawStats           = $soutenanceRepository->countByFiliere();
+            $data['chart_labels'] = json_encode(array_column($rawStats, 'filiere'));
+            $data['chart_values'] = json_encode(array_map(fn($r) => (int) $r['total'], $rawStats));
         }
 
         if ($this->isGranted('ROLE_ENSEIGNANT')) {

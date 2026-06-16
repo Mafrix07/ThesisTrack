@@ -23,6 +23,9 @@
       {{ message }}
     </div>
   {% endfor %}
+  {% for message in app.flashes('danger') %}
+    <div class="tt-flash danger">{{ message }}</div>
+  {% endfor %}
 
   <div class="table-panel">
     <div class="table-toolbar">
@@ -51,7 +54,8 @@
             <td style="white-space:nowrap">
               <a href="{{ path('app_salle_show', {'id': salle.id}) }}" class="btn-view">Voir</a>
               <a href="{{ path('app_salle_edit', {'id': salle.id}) }}" class="btn-edit">Modifier</a>
-              <form method="post" action="{{ path('app_salle_delete', {'id': salle.id}) }}" class="d-inline" onsubmit="return confirm('Supprimer cette salle ?')">
+              <form method="post" action="{{ path('app_salle_delete', {'id': salle.id}) }}" class="d-inline"
+                    data-confirm="Supprimer la salle {{ salle.code }} ({{ salle.localisation }}) ?">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
                 <button class="btn-del">Supprimer</button>
               </form>

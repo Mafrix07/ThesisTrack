@@ -306,6 +306,15 @@ body {
 }
 .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--tt-accent); letter-spacing: .06em }
 
+/* ---- DETAIL VIEW ---- */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 960px; margin: 0 auto }
+.detail-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px }
+.detail-row { display: flex; flex-direction: column; gap: 3px }
+.detail-lbl { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--tt-muted) }
+.detail-val { font-size: 14px; color: var(--tt-text); font-weight: 500 }
+.detail-val em { color: var(--tt-text2); font-style: italic }
+@media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr } }
+
 /* ---- ANIMATIONS ---- */
 @keyframes tt-fadeUp { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
 .kpi-card { animation: tt-fadeUp .4s ease both }

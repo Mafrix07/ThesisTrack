@@ -13,6 +13,11 @@
                     <h2 class="h4 mb-0">Modifier la soutenance de {{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }}</h2>
                 </div>
                 <div class="card-body">
+                    {% if conflict_errors is defined %}
+                      {% for error in conflict_errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                      {% endfor %}
+                    {% endif %}
                     {{ include('soutenance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
                 </div>
                 <div class="card-footer d-flex justify-content-between">

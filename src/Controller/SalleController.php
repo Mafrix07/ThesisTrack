@@ -78,9 +78,13 @@ class SalleController extends AbstractController
     public function delete(Request $request, Salle $salle, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$salle->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($salle);
-            $entityManager->flush();
-            $this->addFlash('success', 'Salle supprimée.');
+            try {
+                $entityManager->remove($salle);
+                $entityManager->flush();
+                $this->addFlash('success', 'Salle supprimée.');
+            } catch (\Exception) {
+                $this->addFlash('danger', "Impossible de supprimer la salle {$salle->getCode()} : des soutenances y sont programmées.");
+            }
         }
 
         return $this->redirectToRoute('app_salle_index', [], Response::HTTP_SEE_OTHER);

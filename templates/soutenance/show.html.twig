@@ -1,71 +1,112 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails Soutenance{% endblock %}
+{% block title %}Soutenance — {{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }}{% endblock %}
 
 {% block body %}
 {% include '_navbar.html.twig' %}
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-info text-white text-center">
-                    <h2 class="h4 mb-0">Récapitulatif de la Soutenance</h2>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6 text-center">
-                            <h5>Date</h5>
-                            <p class="h4">{{ soutenance.date|date('d/m/Y') }}</p>
-                        </div>
-                        <div class="col-md-6 text-center">
-                            <h5>Heure</h5>
-                            <p class="h4">{{ soutenance.heure|date('H:i') }}</p>
-                        </div>
-                    </div>
-
-                    <h5 class="border-bottom pb-2">Informations Générales</h5>
-                    <table class="table table-borderless">
-                        <tr>
-                            <th style="width: 30%">Étudiant :</th>
-                            <td>{{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }}</td>
-                        </tr>
-                        <tr>
-                            <th>Filière :</th>
-                            <td>{{ soutenance.etudiant.filiere }}</td>
-                        </tr>
-                        <tr>
-                            <th>Thème :</th>
-                            <td><em>{{ soutenance.etudiant.themeMemoire }}</em></td>
-                        </tr>
-                        <tr>
-                            <th>Salle :</th>
-                            <td>{{ soutenance.salle.code }} ({{ soutenance.salle.localisation }})</td>
-                        </tr>
-                    </table>
-
-                    <h5 class="border-bottom pb-2 mt-4">Composition du Jury</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Président
-                            <span class="fw-bold">{{ soutenance.president.prenom }} {{ soutenance.president.nom }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Rapporteur
-                            <span class="fw-bold">{{ soutenance.rapporteur.prenom }} {{ soutenance.rapporteur.nom }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Examinateur
-                            <span class="fw-bold">{{ soutenance.examinateur.prenom }} {{ soutenance.examinateur.nom }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <a href="{{ path('app_soutenance_index') }}" class="btn btn-secondary">Retour</a>
-                    <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="btn btn-warning">Modifier</a>
-                </div>
-            </div>
-        </div>
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title">Détail de la <em>Soutenance</em></h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="btn-edit">Modifier</a>
+      <a href="{{ path('app_soutenance_index') }}" class="btn btn-secondary btn-sm">Retour</a>
     </div>
-</div>
+  </div>
+</section>
+
+<main class="page-body">
+  <div class="detail-grid">
+
+    <!-- Étudiant -->
+    <div class="table-panel">
+      <div class="table-toolbar">
+        <div class="ttbar-left"><span class="ttbar-accent"></span><h2 class="table-title">Étudiant</h2></div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-row">
+          <span class="detail-lbl">Nom complet</span>
+          <span class="detail-val"><strong>{{ soutenance.etudiant.prenom }} {{ soutenance.etudiant.nom }}</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-lbl">Email</span>
+          <span class="detail-val">{{ soutenance.etudiant.email }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-lbl">Filière</span>
+          <span class="detail-val">{{ soutenance.etudiant.filiere }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-lbl">Thème du mémoire</span>
+          <span class="detail-val"><em>{{ soutenance.etudiant.themeMemoire }}</em></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Planification -->
+    <div class="table-panel">
+      <div class="table-toolbar">
+        <div class="ttbar-left"><span class="ttbar-accent"></span><h2 class="table-title">Planification</h2></div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-row">
+          <span class="detail-lbl">Date</span>
+          <span class="tt-badge date-b" style="font-size:14px;padding:6px 16px;width:fit-content">{{ soutenance.date|date('d/m/Y') }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-lbl">Heure</span>
+          <span class="tt-badge time-b" style="font-size:14px;padding:6px 16px;width:fit-content">{{ soutenance.heure|date('H:i') }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-lbl">Salle</span>
+          <span class="detail-val"><strong>{{ soutenance.salle.code }}</strong> — {{ soutenance.salle.localisation }} <span class="tt-badge none">{{ soutenance.salle.capacite }} places</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jury (pleine largeur) -->
+    <div class="table-panel" style="grid-column:1/-1">
+      <div class="table-toolbar">
+        <div class="ttbar-left"><span class="ttbar-accent"></span><h2 class="table-title">Composition du Jury</h2></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rôle</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Spécialité</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tt-badge president">Président</span></td>
+              <td><strong>{{ soutenance.president.nom }}</strong></td>
+              <td>{{ soutenance.president.prenom }}</td>
+              <td>{{ soutenance.president.specialite }}</td>
+              <td>{{ soutenance.president.email }}</td>
+            </tr>
+            <tr>
+              <td><span class="tt-badge rapporteur">Rapporteur</span></td>
+              <td><strong>{{ soutenance.rapporteur.nom }}</strong></td>
+              <td>{{ soutenance.rapporteur.prenom }}</td>
+              <td>{{ soutenance.rapporteur.specialite }}</td>
+              <td>{{ soutenance.rapporteur.email }}</td>
+            </tr>
+            <tr>
+              <td><span class="tt-badge examinateur">Examinateur</span></td>
+              <td><strong>{{ soutenance.examinateur.nom }}</strong></td>
+              <td>{{ soutenance.examinateur.prenom }}</td>
+              <td>{{ soutenance.examinateur.specialite }}</td>
+              <td>{{ soutenance.examinateur.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
 {% endblock %}

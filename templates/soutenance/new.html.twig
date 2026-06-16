@@ -13,6 +13,11 @@
                     <h2 class="h4 mb-0">Nouvelle Programmation</h2>
                 </div>
                 <div class="card-body">
+                    {% if conflict_errors is defined %}
+                      {% for error in conflict_errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                      {% endfor %}
+                    {% endif %}
                     {{ include('soutenance/_form.html.twig') }}
                 </div>
                 <div class="card-footer">

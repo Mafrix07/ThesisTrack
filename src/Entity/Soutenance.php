@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: SoutenanceRepository::class)]
-#[UniqueEntity(fields: ['etudiant'], message: 'Cet étudiant a déjà une soutenance programmée.')]
+#[UniqueEntity(fields: ['etudiant'], groups: ['unique_etudiant'], message: 'Cet étudiant a déjà une soutenance programmée.')]
 class Soutenance
 {
     #[ORM\Id]
@@ -134,7 +134,7 @@ class Soutenance
         return $this;
     }
 
-    #[Assert\Callback]
+    #[Assert\Callback(groups: ['jury'])]
     public function validateJury(ExecutionContextInterface $context, $payload): void
     {
         if (!$this->president || !$this->rapporteur || !$this->examinateur) {

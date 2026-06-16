@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow border-0" style="border-radius:16px;overflow:hidden">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Nouveau compte utilisateur</h2>
+                </div>
+                <div class="card-body p-4">
+                    {% for message in app.flashes('danger') %}
+                      <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                    {{ form_start(form) }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                        <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                    </div>
+                    <div class="mb-3">{{ form_row(form.email) }}</div>
+                    <div class="mb-3">{{ form_row(form.roles) }}</div>
+                    <div class="mb-3">{{ form_row(form.plainPassword) }}</div>
+                    <div class="d-grid">
+                        <button class="btn btn-success">Créer le compte</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Comptes{% endblock %}
+
+{% block body %}
+{% include '_navbar.html.twig' %}
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title">Gestion des <em>Comptes</em></h1>
+    <a href="{{ path('app_user_new') }}" class="btn-add">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Créer un compte
+    </a>
+  </div>
+</section>
+
+<main class="page-body">
+
+  {% for message in app.flashes('success') %}
+    <div class="tt-flash success">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ message }}
+    </div>
+  {% endfor %}
+  {% for message in app.flashes('danger') %}
+    <div class="tt-flash danger">{{ message }}</div>
+  {% endfor %}
+
+  <div class="table-panel">
+    <div class="table-toolbar">
+      <div class="ttbar-left">
+        <span class="ttbar-accent"></span>
+        <h2 class="table-title">Comptes Utilisateurs</h2>
+      </div>
+      <span class="result-count">{{ users|length }} compte(s)</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle(s)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr {% if user.userIdentifier == app.user.userIdentifier %}style="background:rgba(74,144,217,.05)"{% endif %}>
+            <td><strong>{{ user.nom }}</strong></td>
+            <td>{{ user.prenom }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              {% for role in user.roles %}
+                {% if role == 'ROLE_ADMIN' %}
+                  <span class="tt-badge president">Admin</span>
+                {% elseif role == 'ROLE_ENSEIGNANT' %}
+                  <span class="tt-badge rapporteur">Enseignant</span>
+                {% endif %}
+              {% endfor %}
+            </td>
+            <td style="white-space:nowrap">
+              <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn-edit">Modifier</a>
+              {% if user.userIdentifier != app.user.userIdentifier %}
+              <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" class="d-inline"
+                    data-confirm="Supprimer le compte {{ user.email }} ? Cette action est irréversible.">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                <button class="btn-del">Supprimer</button>
+              </form>
+              {% else %}
+                <span class="tt-badge date-b">Vous</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr class="td-empty"><td colspan="5">Aucun compte enregistré</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+{% endblock %}

@@ -35,6 +35,10 @@
          href="{{ path('app_soutenance_index') }}">
         <span class="nav-dot d-soutenance"></span>Soutenances
       </a>
+      <a class="nav-lnk {% if 'app_user' in app.request.attributes.get('_route') %}active{% endif %}"
+         href="{{ path('app_user_index') }}">
+        <span class="nav-dot" style="background:#a78bfa"></span>Comptes
+      </a>
       {% endif %}
 
       {% if is_granted('ROLE_ENSEIGNANT') %}
@@ -49,6 +53,10 @@
         <div class="user-info">{{ app.user.prenom }} {{ app.user.nom }}</div>
         <div class="user-role">{{ is_granted('ROLE_ADMIN') ? 'Administrateur' : 'Enseignant' }}</div>
       </div>
+      <a href="{{ path('app_profil_password') }}" class="btn-logout" title="Changer mon mot de passe">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        MDP
+      </a>
       <a class="btn-logout" href="{{ path('app_logout') }}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>

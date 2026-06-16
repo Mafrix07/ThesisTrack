@@ -1,34 +1,136 @@
 {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <p class="text-muted small mb-3">Commencez par choisir le créneau — les listes se mettront à jour automatiquement.</p>
+
     <div class="row mb-3">
-        <div class="col-md-12">
-            {{ form_row(form.etudiant) }}
+        <div class="col-md-6">{{ form_row(form.date) }}</div>
+        <div class="col-md-6">{{ form_row(form.heure) }}</div>
+    </div>
+
+    <div id="tt-slot-dependent">
+        <div id="tt-slot-hint" class="alert alert-info py-2 small mb-3" style="display:none">
+            Choisissez d'abord une date et une heure pour voir les salles et enseignants disponibles.
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">{{ form_row(form.salle) }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">{{ form_row(form.etudiant) }}</div>
+        </div>
+
+        <hr>
+        <h5 class="mb-3">Membres du Jury</h5>
+        <div class="row mb-3">
+            <div class="col-md-4">{{ form_row(form.president) }}</div>
+            <div class="col-md-4">{{ form_row(form.rapporteur) }}</div>
+            <div class="col-md-4">{{ form_row(form.examinateur) }}</div>
         </div>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-4">
-            {{ form_row(form.date) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.heure) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.salle) }}
-        </div>
-    </div>
-    <hr>
-    <h5>Membres du Jury</h5>
-    <div class="row mb-3">
-        <div class="col-md-4">
-            {{ form_row(form.president) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.rapporteur) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.examinateur) }}
-        </div>
-    </div>
+
     <div class="d-grid mt-4">
         <button class="btn btn-success btn-lg">{{ button_label|default('Confirmer la programmation') }}</button>
     </div>
 {{ form_end(form) }}
+
+<script>
+(function () {
+    const API        = '/admin/soutenance/api/disponibles';
+    const SOUT_ID    = '{{ soutenance.id is not null ? soutenance.id : '' }}';
+    const PLACEHOLDERS = {
+        salle:      '— Sélectionner une salle —',
+        president:  '— Choisir le président —',
+        rapporteur: '— Choisir le rapporteur —',
+        examinateur:"— Choisir l'examinateur —",
+    };
+
+    const dateEl  = document.getElementById('soutenance_date');
+    const heureEl = document.getElementById('soutenance_heure');
+    const salleEl = document.getElementById('soutenance_salle');
+    const presEl  = document.getElementById('soutenance_president');
+    const rapEl   = document.getElementById('soutenance_rapporteur');
+    const examEl  = document.getElementById('soutenance_examinateur');
+    const hint    = document.getElementById('tt-slot-hint');
+
+    // Available enseignants for the current slot (updated by AJAX)
+    let slotEns = [];
+
+    function buildOptions(el, items, placeholder) {
+        const prev = el.value;
+        el.innerHTML = '';
+        const ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = placeholder;
+        el.appendChild(ph);
+        for (const item of items) {
+            const o = document.createElement('option');
+            o.value = item.id;
+            o.textContent = item.label;
+            el.appendChild(o);
+        }
+        if (prev && items.some(i => String(i.id) === prev)) el.value = prev;
+    }
+
+    function crossFilter() {
+        const sel = { pres: presEl.value, rap: rapEl.value, exam: examEl.value };
+
+        function repopulate(el, excludeVals, ph) {
+            const cur   = el.value;
+            const avail = slotEns.filter(e => !excludeVals.includes(String(e.id)));
+            buildOptions(el, avail, ph);
+            if (cur && !excludeVals.includes(cur)) el.value = cur;
+        }
+
+        repopulate(presEl,  [sel.rap,  sel.exam].filter(Boolean), PLACEHOLDERS.president);
+        repopulate(rapEl,   [sel.pres, sel.exam].filter(Boolean), PLACEHOLDERS.rapporteur);
+        repopulate(examEl,  [sel.pres, sel.rap ].filter(Boolean), PLACEHOLDERS.examinateur);
+    }
+
+    async function refreshSlot() {
+        const date  = dateEl.value;
+        const heure = heureEl.value;
+
+        if (!date || !heure) {
+            hint.style.display = '';
+            [salleEl, presEl, rapEl, examEl].forEach(el => { el.disabled = true; });
+            return;
+        }
+
+        hint.style.display = 'none';
+        [salleEl, presEl, rapEl, examEl].forEach(el => { el.disabled = false; });
+
+        const params = new URLSearchParams({ date, heure });
+        if (SOUT_ID) params.set('soutenance', SOUT_ID);
+
+        try {
+            const resp = await fetch(`${API}?${params}`);
+            const data = await resp.json();
+
+            slotEns = data.enseignants;
+
+            buildOptions(salleEl, data.salles, PLACEHOLDERS.salle);
+            buildOptions(presEl,  slotEns,     PLACEHOLDERS.president);
+            buildOptions(rapEl,   slotEns,     PLACEHOLDERS.rapporteur);
+            buildOptions(examEl,  slotEns,     PLACEHOLDERS.examinateur);
+
+            crossFilter();
+        } catch (err) {
+            console.error('Erreur disponibilités :', err);
+        }
+    }
+
+    // Init
+    if (!dateEl.value || !heureEl.value) {
+        hint.style.display = '';
+        [salleEl, presEl, rapEl, examEl].forEach(el => { el.disabled = true; });
+    } else {
+        refreshSlot();
+    }
+
+    dateEl.addEventListener('change',  refreshSlot);
+    heureEl.addEventListener('change', refreshSlot);
+    [presEl, rapEl, examEl].forEach(el => el.addEventListener('change', crossFilter));
+})();
+</script>

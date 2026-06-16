@@ -22,5 +22,59 @@
                 <span>Université · {{ 'now'|date('Y') }}</span>
             </div>
         </footer>
+
+        <!-- Modale de confirmation partagée -->
+        <div class="modal fade" id="tt-confirm-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius:16px;overflow:hidden">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold" style="font-family:'Outfit',sans-serif">Confirmer l'action</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body pt-1">
+                        <p id="tt-confirm-msg" class="text-secondary mb-0" style="font-size:14px"></p>
+                    </div>
+                    <div class="modal-footer border-0 pt-0 gap-2">
+                        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-danger btn-sm px-4" id="tt-confirm-ok">Confirmer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-dismiss des messages flash après 4 s
+            document.querySelectorAll('.tt-flash').forEach(el => {
+                setTimeout(() => {
+                    el.style.transition = 'opacity .5s ease';
+                    el.style.opacity = '0';
+                    setTimeout(() => el.remove(), 500);
+                }, 4000);
+            });
+
+            // Modale de confirmation pour les suppressions
+            const modalEl = document.getElementById('tt-confirm-modal');
+            if (!modalEl) return;
+            const modal   = new bootstrap.Modal(modalEl);
+            const msgEl   = document.getElementById('tt-confirm-msg');
+            const okBtn   = document.getElementById('tt-confirm-ok');
+            let pending   = null;
+
+            document.querySelectorAll('form[data-confirm]').forEach(form => {
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    msgEl.textContent = form.dataset.confirm;
+                    pending = form;
+                    modal.show();
+                });
+            });
+
+            okBtn.addEventListener('click', () => {
+                modal.hide();
+                if (pending) { const f = pending; pending = null; f.submit(); }
+            });
+        });
+        </script>
     </body>
 </html>

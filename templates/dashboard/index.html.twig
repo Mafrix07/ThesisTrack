@@ -28,7 +28,7 @@
 <main class="page-body">
 
   {% if is_granted('ROLE_ADMIN') %}
-  <div class="kpi-grid">
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     <a href="{{ path('app_etudiant_index') }}" class="kpi-card k-etudiants" data-icon="🎓">
       <div class="kpi-top">
         <div class="kpi-icon-box">
@@ -72,6 +72,59 @@
       <div class="kpi-num">{{ stats.soutenances }}</div>
       <div class="kpi-label">Soutenances</div>
     </a>
+  </div>
+
+  {# Prochaines soutenances + chart #}
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start">
+
+    <div class="table-panel">
+      <div class="table-toolbar">
+        <div class="ttbar-left">
+          <span class="ttbar-accent"></span>
+          <h2 class="table-title">Prochaines Soutenances</h2>
+        </div>
+        <a href="{{ path('app_soutenance_index') }}" class="result-count" style="text-decoration:none">Voir tout →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date &amp; Heure</th><th>Étudiant</th><th>Filière</th><th>Salle</th></tr>
+          </thead>
+          <tbody>
+            {% for s in upcoming %}
+            <tr>
+              <td>
+                <span class="tt-badge date-b">{{ s.date|date('d/m/Y') }}</span>
+                <span class="tt-badge time-b">{{ s.heure|date('H:i') }}</span>
+              </td>
+              <td><strong>{{ s.etudiant.prenom }} {{ s.etudiant.nom }}</strong></td>
+              <td>{{ s.etudiant.filiere }}</td>
+              <td>{{ s.salle.code }}</td>
+            </tr>
+            {% else %}
+            <tr class="td-empty"><td colspan="4">Aucune soutenance à venir</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-panel" style="padding-bottom:20px">
+      <div class="table-toolbar">
+        <div class="ttbar-left">
+          <span class="ttbar-accent"></span>
+          <h2 class="table-title">Par Filière</h2>
+        </div>
+      </div>
+      <div style="padding:20px;position:relative;height:250px;display:flex;align-items:center;justify-content:center">
+        {% if chart_labels != '[]' %}
+          <canvas id="filiereChart"></canvas>
+        {% else %}
+          <p style="color:var(--tt-muted);font-size:13px">Aucune donnée</p>
+        {% endif %}
+      </div>
+    </div>
+
   </div>
   {% endif %}
 
@@ -172,4 +225,33 @@
   {% endif %}
 
 </main>
+
+{% if is_granted('ROLE_ADMIN') and chart_labels is defined and chart_labels != '[]' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('filiereChart');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart_labels|raw }},
+            datasets: [{
+                data: {{ chart_values|raw }},
+                backgroundColor: ['#60a5fa','#34d399','#f59e0b','#a78bfa','#f87171','#22d3ee','#fb923c'],
+                borderWidth: 2,
+                borderColor: '#fff',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { family: 'Outfit', size: 11 }, padding: 10 } }
+            }
+        }
+    });
+});
+</script>
+{% endif %}
 {% endblock %}

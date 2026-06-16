@@ -78,9 +78,13 @@ class EnseignantController extends AbstractController
     public function delete(Request $request, Enseignant $enseignant, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$enseignant->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($enseignant);
-            $entityManager->flush();
-            $this->addFlash('success', 'Enseignant supprimé.');
+            try {
+                $entityManager->remove($enseignant);
+                $entityManager->flush();
+                $this->addFlash('success', 'Enseignant supprimé.');
+            } catch (\Exception) {
+                $this->addFlash('danger', "Impossible de supprimer {$enseignant->getPrenom()} {$enseignant->getNom()} : il participe à un jury de soutenance.");
+            }
         }
 
         return $this->redirectToRoute('app_enseignant_index', [], Response::HTTP_SEE_OTHER);
